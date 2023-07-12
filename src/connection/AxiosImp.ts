@@ -85,8 +85,7 @@ export default class AxiosImp extends Axios
 
                 listProgress.push(getResponse)
             });
-
-            console.log(listProgress);
+          
             return listProgress;
         })
     }
