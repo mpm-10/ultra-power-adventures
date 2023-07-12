@@ -1,45 +1,51 @@
 {"frames": 
     {
-        "coin001":
+        "coin000":
         {
             "frame": {"x":0,"y":0,"w":41,"h":42},
             "spriteSourceSize": {"x":0,"y":0,"w":41,"h":42},
             "sourceSize": {"w":41,"h":42}
         },
-        "coin002":
+        "coin001":
         {
             "frame": {"x":41,"y":0,"w":41,"h":42},
-            "spriteSourceSize": {"x":0,"y":0,"w":41,"h":42},
+            "spriteSourceSize": {"x":41,"y":0,"w":41,"h":42},
+            "sourceSize": {"w":41,"h":42}
+        },
+        "coin002":
+        {
+            "frame": {"x":82,"y":0,"w":41,"h":42},
+            "spriteSourceSize": {"x":82,"y":0,"w":41,"h":42},
             "sourceSize": {"w":41,"h":42}
         },
         "coin003":
         {
-            "frame": {"x":82,"y":0,"w":41,"h":42},
-            "spriteSourceSize": {"x":0,"y":0,"w":41,"h":42},
+            "frame": {"x":0,"y":41,"w":41,"h":42},
+            "spriteSourceSize": {"x":0,"y":41,"w":41,"h":42},
             "sourceSize": {"w":41,"h":42}
         },
         "coin004":
         {
-            "frame": {"x":0,"y":41,"w":41,"h":42},
-            "spriteSourceSize": {"x":0,"y":0,"w":41,"h":42},
+            "frame": {"x":41,"y":41,"w":41,"h":42},
+            "spriteSourceSize": {"x":41,"y":41,"w":41,"h":42},
             "sourceSize": {"w":41,"h":42}
         },
         "coin005":
         {
-            "frame": {"x":41,"y":41,"w":41,"h":42},
-            "spriteSourceSize": {"x":0,"y":0,"w":41,"h":42},
+            "frame": {"x":41,"y":82,"w":41,"h":42},
+            "spriteSourceSize": {"x":41,"y":82,"w":41,"h":42},
             "sourceSize": {"w":41,"h":42}
         },
         "coin006":
         {
-            "frame": {"x":0,"y":82,"w":41,"h":42},
-            "spriteSourceSize": {"x":0,"y":0,"w":41,"h":42},
+            "frame": {"x":82,"y":0,"w":41,"h":42},
+            "spriteSourceSize": {"x":82,"y":0,"w":41,"h":42},
             "sourceSize": {"w":41,"h":42}
         },
         "coin007":
         {
-            "frame": {"x":41,"y":0,"w":41,"h":42},
-            "spriteSourceSize": {"x":0,"y":0,"w":41,"h":42},
+            "frame": {"x":82,"y":41,"w":41,"h":42},
+            "spriteSourceSize": {"x":82,"y":41,"w":41,"h":42},
             "sourceSize": {"w":41,"h":42}
         }
     }
