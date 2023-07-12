@@ -1,3 +1,4 @@
+import AxiosImp from "../../connection/AxiosImp";
 import KeyboardKeys from "../../utils/KeyboardKeys";
 import { firstPhaseFunctions } from "./firstPhaseFunctions";
 
@@ -5,15 +6,18 @@ export default class firstPhaseBackground extends Phaser.Scene
 {
     v! : firstPhaseFunctions;
     keys! : KeyboardKeys;
+    axiosImp! : AxiosImp;
+    
     background1! : Phaser.GameObjects.Image;
     background2! : Phaser.GameObjects.Image;
     background3! : Phaser.GameObjects.Image;
     background4! : Phaser.GameObjects.Image;
 
-    constructor(v : firstPhaseFunctions)
+    constructor(v : firstPhaseFunctions, axiosImp : AxiosImp)
     {
-        super({key:'firstPhaseBackground1', active : true});
+        super({ key : 'firstPhaseBackground' });
         this.v = v;
+        this.axiosImp = axiosImp;
     }
 
     preload() : void

@@ -1,28 +1,29 @@
+import AxiosImp from "../../connection/AxiosImp";
 import informationsBars from "../../elements/informationsBars";
+import GlobalVariables from "../../utils/GlobalVariables";
 import firstPhaseBackground from "./firstPhaseBackground";
-import firstPhaseBackground1 from "./firstPhaseBackground";
-import { firstPhaseFunctions } from "./firstPhaseFunctions";
 
 export default class firstPhase extends Phaser.Scene
 {
-    v! : firstPhaseFunctions
-    background! : firstPhaseBackground;
+    v! : GlobalVariables
+    firstPhaseBackground! : firstPhaseBackground;
     informationsBars! : informationsBars;
+    axiosImp! : AxiosImp;
 
-    constructor()
+    constructor(v : GlobalVariables, axiosImp : AxiosImp)
     {
-        super({key : 'firstPhase'});
+        super({ key : 'firstPhase' });
+        this.v = v;
+        this.axiosImp = axiosImp;
     }
 
     create() : void
     {
-        this.v = new firstPhaseFunctions();
 
-        this.background = new firstPhaseBackground1(this.v);
-        this.informationsBars = new informationsBars(this.v);
+        this.firstPhaseBackground = new firstPhaseBackground(this.v, this.axiosImp);
+        this.informationsBars = new informationsBars(this.v, this.axiosImp);
 
-
-        this.scene.add('firstPhaseBackground', this.background, true)
-        this.scene.add('informationsBars', this.informationsBars, true)
+        this.scene.add('firstPhaseBackground', this.firstPhaseBackground, true);
+        this.scene.add('informationsBars', this.informationsBars, true);
     }
 }
