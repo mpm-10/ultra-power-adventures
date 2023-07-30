@@ -85,15 +85,16 @@ export default class AxiosImp extends Axios
 
                 listProgress.push(getResponse)
             });
-          
+
+            console.log(listProgress);
             return listProgress;
         })
     }
 
-    async indexByNickname(nickname : String) : Promise<IProgress>
+    async indexByNickname(nicknameUser : string) : Promise<IProgress>
     {
 
-        const getProgressByNickname = axios.get<IProgress>('https://api-rest-mongoose.matheusportela4.repl.co/progress/search_nickname/' + nickname);
+        const getProgressByNickname = axios.get<IProgress>("https://api-rest-mongoose.matheusportela4.repl.co/progress/search_nickname/", { params: {nickname : '' + nicknameUser}});
 
         return await getProgressByNickname.then((response) => {
             let res = response.data;
@@ -116,14 +117,16 @@ export default class AxiosImp extends Axios
                 armor: res.armor
             };
 
+            this.progress = getResponse;
+
             return getResponse;
         });   
         
     }
 
-    async indexByPassword(password : String) : Promise<IProgress>
+    async indexByPassword(passwordUser : String) : Promise<IProgress>
     {
-        const getProgressByPassword = axios.get<IProgress>('https://api-rest-mongoose.matheusportela4.repl.co/progress/search_nickname/' + password);
+        const getProgressByPassword = axios.get<IProgress>('https://api-rest-mongoose.matheusportela4.repl.co/progress/search_nickname/', { params: {password : '' + passwordUser}});
 
         return await getProgressByPassword.then((response) => {
             let res = response.data;
@@ -146,6 +149,8 @@ export default class AxiosImp extends Axios
                 armor: res.armor
             };
 
+            this.progress = getResponse;
+
             return getResponse;
         });   
     }
@@ -155,15 +160,108 @@ export default class AxiosImp extends Axios
         await axios.post<IProgress>('https://api-rest-mongoose.matheusportela4.repl.co/progress/', this.progress);
     }
 
-    async update(nickname : String) : Promise<void>
+    async update(nicknameUser : String) : Promise<void>
     {
-        await axios.put<IProgress>('https://api-rest-mongoose.matheusportela4.repl.co/progress/' + nickname, this.progress);
+        await axios.put<IProgress>('https://api-rest-mongoose.matheusportela4.repl.co/progress/', this.progress,  { params: {nickname : '' + nicknameUser}});
     }
 
     async destroy(nickname : String) : Promise<void>
     {
 
-        await axios.delete<IProgress>('https://api-rest-mongoose.matheusportela4.repl.co/progress/' + nickname);
+        await axios.delete<IProgress>('https://api-rest-mongoose.matheusportela4.repl.co/progress/',  { params: {nickname : '' + nickname}});
+    }
+
+    async verifyUser(nickname : string, password : string): Promise<boolean[]>
+    {
+        let exists : boolean[] = [];
+
+        try
+        {
+            let userVerify = await this.indexByNickname(nickname);
+
+            if(userVerify != null)
+            {
+                exists.push(true);
+            }
+
+            if(userVerify.password == password)
+            {
+                exists.push(true);
+            }
+            else
+            {
+                exists.push(false);
+            }
+        }
+        catch
+        {
+            exists.push(false);
+            exists.push(false);
+        }
+
+        return exists;
+    }
+
+    async createProgress() : Promise<void>
+    {
+        this.updateValues();
+
+        this.store();
+
+        this.getBestScore().then((score) => {
+            this.v.best_score = score;
+        });
+    }
+
+    async recoveryProgress() : Promise<void>
+    {
+        this.indexByNickname(this.v.nickname);
+        
+        this.updateVariables();
+
+        this.getBestScore().then((score) => {
+            this.v.best_score = score;
+        });
+    }
+
+    async saveProgress() : Promise<void>
+    {
+        this.updateValues();
+        
+        this.update(this.v.nickname);
+        
+        await this.getBestScore().then((score) => {
+            this.v.best_score = score;
+        });
+    }
+
+    async getRanking() : Promise<Array<string | number>[]>
+    {
+        let ranking : Array<string | number>[] = [];
+        let rankingIndex = [];
+
+        let listProgress = await this.show();
+
+        listProgress.forEach(progress => {
+            rankingIndex = [progress.nickname, progress.score, progress.level, progress.experience];
+            ranking.push(rankingIndex);
+        });
+
+        ranking.sort((n1, n2) => {
+            if(n1[1] > n2[1])
+            {
+                return 1;
+            }
+
+            if(n1[1] < n2[1])
+            {
+                return -1;
+            }
+
+            return 0;
+        });
+
+        return ranking;
     }
 
     async getBestScore() : Promise<number>
@@ -171,9 +269,9 @@ export default class AxiosImp extends Axios
         let bestScore = 0;
         let scores: number[] = [];
 
-        let listProgress = this.show();
+        let listProgress = await this.show();
 
-        (await listProgress).forEach(progress => {
+        listProgress.forEach(progress => {
             scores.push(progress.coins);
         });
 
@@ -182,5 +280,8 @@ export default class AxiosImp extends Axios
 
         return bestScore;
     }
+
+
+    
 
 }
