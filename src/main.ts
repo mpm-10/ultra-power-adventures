@@ -1,6 +1,6 @@
 import Phaser from 'phaser';
 import './style.css';
-import firstPhase from './scenes/firstPhase/firstPhase';
+import Game from './game';
 
 export const config : Phaser.Types.Core.GameConfig =
   {
@@ -17,7 +17,7 @@ export const config : Phaser.Types.Core.GameConfig =
             debug: false
         }
     },
-    scene: [firstPhase]
+    scene: [Game]
   }
 
 new Phaser.Game(config);
