@@ -1,8 +1,11 @@
-import { firstPhaseFunctions } from "../scenes/firstPhase/firstPhaseFunctions";
+import AxiosImp from "../connection/AxiosImp";
+import GlobalVariables from "../utils/GlobalVariables";
 
 export default class informationsBars extends Phaser.Scene
 {
-    v! : firstPhaseFunctions;
+    v! : GlobalVariables;
+    axiosImp! : AxiosImp;
+    
     informationBarsBackground! : Phaser.GameObjects.Image;
 
     hb_hp! : Phaser.GameObjects.Image;
@@ -11,7 +14,11 @@ export default class informationsBars extends Phaser.Scene
     hb_front2! : Phaser.GameObjects.Image;
 
     hb_shadow! : Phaser.GameObjects.Image;
+
     hb_health! : Phaser.GameObjects.Image;
+    hb_stamina! : Phaser.GameObjects.Image;
+    hb_shield! : Phaser.GameObjects.Image;
+    hb_armor! : Phaser.GameObjects.Image;
 
     health! : Phaser.GameObjects.Image;
     stamina! : Phaser.GameObjects.Image;
@@ -44,12 +51,14 @@ export default class informationsBars extends Phaser.Scene
 
     timed_event! : Phaser.Time.TimerEvent;
 
-    a : number = 0;
+    
+    t! : Phaser.GameObjects.Text;
 
-    constructor(v : firstPhaseFunctions)
+    constructor(v : GlobalVariables, axiosImp : AxiosImp)
     {
-        super({key:'informationsBars', active : true});
+        super({ key : 'informationsBars' });
         this.v = v;
+        this.axiosImp = axiosImp;
     }
 
     preload() : void
@@ -77,6 +86,7 @@ export default class informationsBars extends Phaser.Scene
         this.load.image('skill5', './assets/elements/skill5.png');
 
         this.load.atlas('coin', 'assets/elements/coin/coin_spritesheet.png', 'assets/elements/coin/coin_spritesheet.json');
+
     }
 
     create() : void
@@ -95,25 +105,25 @@ export default class informationsBars extends Phaser.Scene
         this.hb_front2 = this.add.image(25, 68, 'hb_front2').setOrigin(0);
         this.stamina = this.add.image(32, 75, 'stamina').setOrigin(0).setDisplaySize(35,35);
         this.hb_shadow = this.add.image(80, 63, 'hb_shadow').setOrigin(0);
-        this.hb_health = this.add.image(87, 70, 'hb_health').setOrigin(0);
+        this.hb_stamina = this.add.image(87, 70, 'hb_health').setOrigin(0);
         
         this.text_sp = this.add.text(175, 77, '300/300', { font : '20px Ubuntu', color: '#000000'}).setScrollFactor(0);
 
         //
 
-        this.hb_front2 = this.add.image(945, 17, 'hb_front2').setOrigin(0);
-        this.shield = this.add.image(953, 25, 'shield').setOrigin(0).setDisplaySize(35,35);
-        this.hb_shadow = this.add.image(670, 13, 'hb_shadow').setOrigin(0).setFlipX(true);
-        this.hb_health = this.add.image(677, 20, 'hb_health').setOrigin(0).setFlipX(true);
+        this.hb_front2 = this.add.image(670, 17, 'hb_front2').setOrigin(0);
+        this.shield = this.add.image(678, 25, 'shield').setOrigin(0).setDisplaySize(35,35);
+        this.hb_shadow = this.add.image(725, 13, 'hb_shadow').setOrigin(0);
+        this.hb_shield = this.add.image(732, 20, 'hb_health').setOrigin(0);
         
-        this.text_shield = this.add.text(780, 27, '200/200', { font : '20px Ubuntu', color: '#000000'}).setScrollFactor(0);
+        this.text_shield = this.add.text(820, 27, '200/200', { font : '20px Ubuntu', color: '#000000'}).setScrollFactor(0);
 
-        this.hb_front2 = this.add.image(945, 68, 'hb_front2').setOrigin(0);
-        this.power = this.add.image(950, 75, 'power').setOrigin(0).setDisplaySize(35,35);
-        this.hb_shadow = this.add.image(670, 63, 'hb_shadow').setOrigin(0).setFlipX(true);
-        this.hb_health = this.add.image(677, 70, 'hb_health').setOrigin(0).setFlipX(true);
+        this.hb_front2 = this.add.image(670, 68, 'hb_front2').setOrigin(0);
+        this.power = this.add.image(677, 75, 'power').setOrigin(0).setDisplaySize(35,35);
+        this.hb_shadow = this.add.image(725, 63, 'hb_shadow').setOrigin(0);
+        this.hb_armor = this.add.image(732, 70, 'hb_health').setOrigin(0);
 
-        this.text_armor = this.add.text(780, 77, '150/150', { font : '20px Ubuntu', color: '#000000'}).setScrollFactor(0);
+        this.text_armor = this.add.text(820, 77, '150/150', { font : '20px Ubuntu', color: '#000000'}).setScrollFactor(0);
 
         //
 
@@ -147,6 +157,39 @@ export default class informationsBars extends Phaser.Scene
         this.time.addEvent({ delay: 1000, callback : this.onEvent, callbackScope: this, loop: true });
     }
 
+    update() : void
+    {
+        this.hb_health.setCrop(this.v.life_bar);
+        this.hb_shield.setCrop(this.v.shield_bar);
+        this.hb_stamina.setCrop(this.v.stamina_bar);
+        this.hb_armor.setCrop(this.v.armor_bar);
+
+        this.text_hp.setText(`${this.v.life}/${this.v.life_limit}`);
+        this.text_sp.setText(`${this.v.stamina}/${this.v.stamina_limit}`);
+        this.text_shield.setText(`${this.v.shield}/${this.v.shield_limit}`);
+        this.text_armor.setText(`${this.v.armor}/${this.v.armor_limit}`);
+
+        this.text_level.setText(`Nível: ${this.v.level}`);
+
+        this.text_xp.setText(`XP: ${this.v.experience}/${this.v.experienceByLevel}`);
+
+        this.text_coins.setText(`x ${this.v.coins}`);
+
+        this.text_score.setText(`Pontuação: ${this.v.score}`);
+
+        this.text_high_score.setText(`Melhor Pontuação: ${this.v.best_score}`);
+
+        this.skill1.setVisible(this.v.powerIsActivated[0]);
+        this.skill2.setVisible(this.v.powerIsActivated[1]);
+        this.skill3.setVisible(this.v.powerIsActivated[2]);
+        this.skill4.setVisible(this.v.powerIsActivated[3]);
+        this.skill5.setVisible(this.v.powerIsActivated[4]);
+
+        this.text_time.setText('Tempo Decorrido: ' + this.formatTime(this.v.time_game));
+
+        
+    }
+
     formatTime(seconds : number)
     {
         var minutes = Math.floor(seconds/60);
@@ -156,11 +199,41 @@ export default class informationsBars extends Phaser.Scene
 
         return `${minutes}:${partInSecondsText}`;
     }
-    
+
     onEvent ()
     {
-        this.a++;
+        this.v.time_game++;
 
-        this.text_time.setText('Tempo Decorrido: ' + this.formatTime(this.a));
+        if(this.v.time_game % 10 == 0)
+        {
+            this.axiosImp.saveProgress();
+        }
+
+        if(this.v.time_game % 10 == 0)
+        {
+            if(this.v.stamina > 0 && this.v.life < this.v.life_limit)
+            {
+                this.v.stamina = this.v.stamina - (10 + (10 * (this.v.level - 1)));
+                this.v.life = this.v.life + (10 + (10 * (this.v.level - 1)));
+            }
+        }
+
+        if(this.v.time_game % 15 == 0)
+        {
+            if(this.v.shield < this.v.shield_limit)
+            {
+                this.v.shield = this.v.shield + (20 + (10 * (this.v.level - 1)));
+            }
+        }
+
+        if(this.v.time_game % 30 == 0)
+        {
+            if(this.v.armor < this.v.armor_limit)
+            {
+                this.v.armor = this.v.armor + (30 + (10 * (this.v.level - 1)));
+            }
+        }
+
     }
+    
 }
