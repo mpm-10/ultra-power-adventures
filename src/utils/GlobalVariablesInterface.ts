@@ -2,18 +2,58 @@
 
 export interface GlobalVariablesInterface
 {
-    nickname : String | undefined,
-    password : String | undefined,
-    time_game : Number | undefined,
-    lifes : Number | undefined,
-    score : Number | undefined,
-    level : Number | undefined,
-    experience : Number | undefined,
-    coins : Number | undefined,
-    power1 : Number | undefined,
-    power2 : Number | undefined,
-    life : Number | undefined,
-    stamina : Number | undefined, 
-    shield : Number | undefined,
-    armor : Number | undefined
+    nickname : string,
+    password : string,
+    time_game : number,
+    lifes : number,
+    score : number,
+    level : number,
+    experience : number,
+    coins : number,
+    power1 : number,
+    power2 : number,
+    life : number,
+    stamina : number, 
+    shield : number,
+    armor : number,
+
+    life_limit : number,
+    stamina_limit : number,
+    shield_limit : number,
+    armor_limit : number,
+
+    life_bar : Phaser.Geom.Rectangle,
+    stamina_bar : Phaser.Geom.Rectangle,
+    shield_bar : Phaser.Geom.Rectangle,
+    armor_bar : Phaser.Geom.Rectangle,
+
+    life_proportion : number,
+    stamina_proportion : number,
+    shield_proportion : number,
+    armor_proportion : number,
+
+    best_score : number,
+
+    powerIsActivated : boolean[],
+    power1_position : number,
+    power2_position : number,
+    
+    experienceByLevel : number,
+
+    experienceLevels : number[],
+
+    scenes : Phaser.Scene[],
+
+    loginIsAccepted : boolean,
+
+    selected_powers : boolean[],
+    disponible_powers : boolean[],
+
+    gameIsStart : boolean,
+
+    qtd_powers_selected : number,
+
+    time_game_update : number,
+
+    ranking : Array<string | number>[];
 }
