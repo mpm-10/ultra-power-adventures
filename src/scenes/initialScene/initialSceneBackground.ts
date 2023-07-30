@@ -56,8 +56,6 @@ export default class initialSceneBackground extends Phaser.Scene
 
 		cam.scrollX += speed;
 
-        console.log(cam.scrollX);
-
         if(cam.scrollX == 500000)
         {
             cam.scrollX = 0;
