@@ -202,7 +202,7 @@ export default class Game extends Phaser.Scene
             this.v.powerIsActivated[this.v.power2_position] = true;
         }
 
-        for (i = 0; i < this.v.powerIsActivated.length; i++) 
+        for (let i = 0; i < this.v.powerIsActivated.length; i++)
         {
             if(i == this.v.power1_position || i == this.v.power2_position)
             {
