@@ -17,8 +17,6 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended : true}));
 
-app.get('/', (req : Request, res : Response) => {res.send("API-REST Started!")});
-
 app.get('/progress', progressController.show);
 app.get('/progress/search_id/:id', progressController.indexById);
 app.get('/progress/search_nickname/*', progressController.indexByNickname);
